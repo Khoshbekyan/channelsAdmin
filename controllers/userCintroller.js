@@ -15,7 +15,7 @@ const createUser = async (req, res) => {
     if (!emailRegex.test(email)) {
         return res.status(400).json({
             status: 0,
-            message: "Սխալ էլեկտրնային հասցե 77517",
+            message: "Սխալ էլեկտրնային հասցե",
         });
     }
 
