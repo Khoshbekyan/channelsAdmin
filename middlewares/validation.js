@@ -1,0 +1,28 @@
+import jwt from "jsonwebtoken";
+const jwtKey = "admin"
+import Users from "../schema/userSchema.js"
+const checkAuth = async (req, res, next) => {
+    console.log(req.headers.authorization);
+    try {
+        const decode = req.headers.authorization
+            ?   jwt.verify(req.headers.authorization.split(" ")[1], jwtKey)
+            :   false;
+        console.log("decode: ", decode);
+        if (decode) {
+            const user = await Users.findById(decode.id).select('name surname wallet statement');
+            req.user = user;
+            next()
+        } else {
+            res.status(401).json({
+                message: "Please login!"
+            })
+        }
+    } catch (error) {
+        console.log("error: ", error.message);
+        res.status(401).json({
+            message: error.message
+        })
+    }
+}
+
+export { checkAuth }
